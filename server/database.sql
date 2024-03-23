@@ -1,3 +1,4 @@
+-- Creating Tables
 CREATE TABLE addresses(
     street_number INT NOT NULL,
     street_name VARCHAR(100) NOT NULL,
@@ -21,16 +22,15 @@ CREATE TABLE hotel_chains(
 );
 
 CREATE TABLE employees(
-    employee_id VARCHAR(20) PRIMARY KEY CHECK (employee_id ~ '^[0-9]+$'),
+    employee_id VARCHAR(20) PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
     employee_email VARCHAR(255) DEFAULT '' NOT NULL,
-    role VARCHAR(20) NOT NULL,
+    role VARCHAR(50) NOT NULL,
     salary INT NOT NULL,
     street_name VARCHAR(100) NOT NULL,
     street_number INT NOT NULL,
     city VARCHAR(100) NOT NULL,
     province_state VARCHAR(50),
-    country VARCHAR(100) NOT NULL,
     postal_code VARCHAR(20) NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
@@ -41,8 +41,9 @@ CREATE TABLE employees(
 );
 
 CREATE TABLE hotels(
-    hotel_id INT PRIMARY KEY,
+    hotel_id INT NOT NULL,
     chain_name VARCHAR(255) NOT NULL,
+    category INT NOT NULL,
     manager_id VARCHAR(20) NOT NULL,
     phone_number VARCHAR(20) NOT NULL CHECK (phone_number ~ '^\+?[0-9\s-]+$'),
     contact_email VARCHAR(255) NOT NULL,
@@ -58,19 +59,23 @@ CREATE TABLE hotels(
     ),
     FOREIGN KEY(chain_name) REFERENCES hotel_chains(chain_name),
     FOREIGN KEY(manager_id) REFERENCES employees(employee_id),
-    FOREIGN KEY(street_number, street_name, postal_code) REFERENCES addresses(street_number, street_name, postal_code)
+    FOREIGN KEY(street_number, street_name, postal_code) REFERENCES addresses(street_number, street_name, postal_code),
+    CONSTRAINT pk_hotels PRIMARY KEY (hotel_id, chain_name)
 );
 
 CREATE TABLE employee_works_for(
     employee_id VARCHAR(20) NOT NULL,
     hotel_id INT NOT NULL,
+    chain_name VARCHAR(255) NOT NULL,
+
     FOREIGN KEY(employee_id) REFERENCES employees(employee_id),
-    FOREIGN KEY(hotel_id) REFERENCES hotels(hotel_id)
+    FOREIGN KEY(hotel_id, chain_name) REFERENCES hotels(hotel_id, chain_name)
 );
 
 CREATE TABLE rooms(
     room_number INT NOT NULL,
     hotel_id INT NOT NULL,
+    chain_name VARCHAR(255) NOT NULL,
     price FLOAT NOT NULL,
     capacity INT NOT NULL,
     mountain_view BOOLEAN DEFAULT 'f' NOT NULL,
@@ -80,7 +85,8 @@ CREATE TABLE rooms(
     damages TEXT DEFAULT '',
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
-    FOREIGN KEY(hotel_id) REFERENCES hotels(hotel_id),
+
+    FOREIGN KEY(hotel_id, chain_name) REFERENCES hotels(hotel_id, chain_name),
     CONSTRAINT pk_room PRIMARY KEY (room_number, hotel_id)
 );
 
@@ -138,7 +144,7 @@ CREATE TABLE archives(
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
     FOREIGN KEY(renting_id) REFERENCES rentings(renting_id),
-    FOREIGN KEY(booking_id) REFERENCES bookings(booking_id)
+    FOREIGN KEY (booking_id) REFERENCES bookings(booking_id)
 );
 
 CREATE INDEX idx_customer_id ON bookings (customer_id); --Justification: this is very common in a booking system and will speed up filter queries
