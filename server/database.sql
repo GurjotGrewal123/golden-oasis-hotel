@@ -22,7 +22,7 @@ CREATE TABLE hotel_chains(
 );
 
 CREATE TABLE employees(
-    employee_id VARCHAR(20) PRIMARY KEY CHECK (employee_id ~ '^[0-9]+$'),
+    employee_id VARCHAR(20) PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
     employee_email VARCHAR(255) DEFAULT '' NOT NULL,
     role VARCHAR(50) NOT NULL,
