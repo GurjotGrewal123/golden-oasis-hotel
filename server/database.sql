@@ -140,3 +140,7 @@ CREATE TABLE archives(
     FOREIGN KEY(renting_id) REFERENCES rentings(renting_id),
     FOREIGN KEY(booking_id) REFERENCES bookings(booking_id)
 );
+
+CREATE INDEX idx_customer_id ON bookings (customer_id); --Justification: this is very common in a booking system and will speed up filter queries
+CREATE INDEX idx_employee_email ON employees (employee_email); --Justification: for future systems this will be important for an email system.
+CREATE INDEX idx_chain_name ON hotels (chain_name); --Justification: the management of severeal hotels will be easier if indexed by chain name
