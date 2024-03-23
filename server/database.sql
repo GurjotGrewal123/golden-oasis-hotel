@@ -11,7 +11,7 @@ CREATE TABLE addresses(
 
 CREATE TABLE hotel_chains(
     chain_name VARCHAR(255) PRIMARY KEY,
-    contact_phone_numbers VARCHAR(20) NOT NULL CHECK (phone_number ~ '^\+?[0-9\s-]+$'),
+    contact_phone_numbers VARCHAR(20) NOT NULL CHECK (contact_phone_numbers ~ '^\+?[0-9\s-]+$'),
     contact_emails VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
