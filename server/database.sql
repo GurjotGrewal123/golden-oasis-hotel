@@ -155,6 +155,21 @@ ALTER TABLE hotels ADD
   CONSTRAINT check_category
   CHECK (category IN (1, 2, 3, 4, 5));
 
+CREATE VIEW available_rooms_per_hotel AS --Justificaton: number of available rooms per hotel in total
+    SELECT h.hotel_id, h.chain_name, COUNT(r.room_number) AS available_rooms
+    FROM hotels h
+    LEFT JOIN rooms r ON h.hotel_id = r.hotel_id
+    LEFT JOIN rentings rt ON r.room_number = rt.room_number AND r.hotel_id = rt.hotel_id
+    WHERE rt.renting_id IS NULL
+    GROUP BY h.hotel_id, h.chain_name;
+
+CREATE VIEW bookings_history AS --Justification: well this is obvious. this is neccessary because we need to know customers history
+    SELECT b.booking_id, b.status, c.customer_id, c.full_name AS customer_name, b.start_date, b.end_date, r.room_number, h.hotel_id, h.chain_name
+    FROM bookings b
+    JOIN customers c ON b.customer_id = c.customer_id
+    LEFT JOIN rooms r ON b.room_number = r.room_number AND b.hotel_id = r.hotel_id
+    LEFT JOIN hotels h ON b.hotel_id = h.hotel_id;
+
 
 -- Populating Database 
 INSERT INTO addresses (street_number, street_name, postal_code, city, province_state, created_at, updated_at)
