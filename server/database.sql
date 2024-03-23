@@ -10,7 +10,7 @@ CREATE TABLE addresses(
     CONSTRAINT pk_address PRIMARY KEY (street_name, street_number, postal_code)
 );
 
-CREATE TABLE hotel_chain(
+CREATE TABLE hotel_chains(
     chain_name VARCHAR(255) PRIMARY KEY,
     contact_phone_numbers VARCHAR(20) NOT NULL,
     contact_emails VARCHAR(255) NOT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE hotels(
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
 
-    FOREIGN KEY(chain_name) REFERENCES hotel_chain(chain_name),
+    FOREIGN KEY(chain_name) REFERENCES hotel_chains(chain_name),
     FOREIGN KEY(manager_id) REFERENCES employees(employee_id),
     FOREIGN KEY(street_number, street_name, postal_code) REFERENCES addresses(street_number, street_name, postal_code)
 );
