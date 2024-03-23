@@ -147,12 +147,6 @@ CREATE TABLE archives(
     FOREIGN KEY (booking_id) REFERENCES bookings(booking_id)
 );
 
--- ALTER TABLE employees add
---   CONSTRAINT "fk_employees_hotel_id"
---   FOREIGN KEY("hotel_id")
---   REFERENCES "hotels"("hotel_id");
-
-
 ALTER TABLE hotels ADD
   CONSTRAINT check_category
   CHECK (category IN (1, 2, 3, 4, 5));
