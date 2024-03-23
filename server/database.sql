@@ -7,21 +7,22 @@ CREATE TABLE addresses(
     province_state VARCHAR(50),
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
-
-    CONSTRAINT pk_address PRIMARY KEY (street_name, street_number, postal_code)
+    CONSTRAINT pk_address PRIMARY KEY (street_number, street_name, postal_code)
 );
 
 CREATE TABLE hotel_chains(
     chain_name VARCHAR(255) PRIMARY KEY,
-    contact_phone_numbers VARCHAR(20) NOT NULL,
+    contact_phone_numbers VARCHAR(20) NOT NULL CHECK (contact_phone_numbers ~ '^\+?[0-9\s-]+$'),
     contact_emails VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL
+    updated_at TIMESTAMP NOT NULL,
+    CONSTRAINT valid_contact_emails CHECK (
+        contact_emails ~* '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    )
 );
 
-
 CREATE TABLE employees(
-    employee_id VARCHAR(20) PRIMARY KEY,
+    employee_id VARCHAR(20) PRIMARY KEY CHECK (employee_id ~ '^[0-9]+$'),
     full_name VARCHAR(100) NOT NULL,
     employee_email VARCHAR(255) DEFAULT '' NOT NULL,
     role VARCHAR(50) NOT NULL,
@@ -33,7 +34,9 @@ CREATE TABLE employees(
     postal_code VARCHAR(20) NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
-
+    CONSTRAINT valid_employee_email CHECK (
+        employee_email ~* '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    ),
     FOREIGN KEY(street_number, street_name, postal_code) REFERENCES addresses(street_number, street_name, postal_code)
 );
 
@@ -42,16 +45,18 @@ CREATE TABLE hotels(
     chain_name VARCHAR(255) NOT NULL,
     category INT NOT NULL,
     manager_id VARCHAR(20) NOT NULL,
-    phone_number VARCHAR(20) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL CHECK (phone_number ~ '^\+?[0-9\s-]+$'),
     contact_email VARCHAR(255) NOT NULL,
     street_name VARCHAR(100) NOT NULL,
-    street_number int NOT NULL,
+    street_number INT NOT NULL,
     postal_code VARCHAR(20) NOT NULL,
     city VARCHAR(100) NOT NULL,
     province_state VARCHAR(50),
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
-
+    CONSTRAINT valid_contact_email CHECK (
+        contact_email ~* '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    ),
     FOREIGN KEY(chain_name) REFERENCES hotel_chains(chain_name),
     FOREIGN KEY(manager_id) REFERENCES employees(employee_id),
     FOREIGN KEY(street_number, street_name, postal_code) REFERENCES addresses(street_number, street_name, postal_code),
@@ -73,11 +78,11 @@ CREATE TABLE rooms(
     chain_name VARCHAR(255) NOT NULL,
     price FLOAT NOT NULL,
     capacity INT NOT NULL,
-    mountain_view BOOLEAN default 'f' NOT NULL,
-    sea_view BOOLEAN default 'f' NOT NULL,
-    is_expandable BOOLEAN default 'f' NOT NULL,
-    amenities TEXT default '',
-    damages TEXT default '',
+    mountain_view BOOLEAN DEFAULT 'f' NOT NULL,
+    sea_view BOOLEAN DEFAULT 'f' NOT NULL,
+    is_expandable BOOLEAN DEFAULT 'f' NOT NULL,
+    amenities TEXT DEFAULT '',
+    damages TEXT DEFAULT '',
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
 
@@ -86,24 +91,25 @@ CREATE TABLE rooms(
 );
 
 CREATE TABLE customers(
-    customer_id VARCHAR(20) PRIMARY KEY,
+    customer_id VARCHAR(20) PRIMARY KEY CHECK (customer_id ~ '^[0-9]+$'),
     full_name VARCHAR(100) NOT NULL,
     customer_email VARCHAR(255) DEFAULT '' NOT NULL,
-    street_number int NOT NULL,
+    street_number INT NOT NULL,
     street_name VARCHAR(100) NOT NULL,
     postal_code VARCHAR(20) NOT NULL,
     city VARCHAR(100) NOT NULL,
     province_state VARCHAR(50),
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
-
+    CONSTRAINT valid_customer_email CHECK (
+        customer_email ~* '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    ),
     FOREIGN KEY(street_number, street_name, postal_code) REFERENCES addresses(street_number, street_name, postal_code)
 );
 
-
 CREATE TABLE bookings(
     booking_id INT PRIMARY KEY,
-    status VARCHAR NOT NULL,
+    status VARCHAR(255) NOT NULL,
     customer_id VARCHAR(20),
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
@@ -111,7 +117,6 @@ CREATE TABLE bookings(
     hotel_id INT,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
-
     FOREIGN KEY(customer_id) REFERENCES customers(customer_id)
 );
 
@@ -127,10 +132,9 @@ CREATE TABLE rentings(
     has_booked BOOLEAN DEFAULT 't' NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
-
     FOREIGN KEY(customer_id) REFERENCES customers(customer_id),
     FOREIGN KEY(employee_id) REFERENCES employees(employee_id),
-    FOREIGN KEY (booking_id) REFERENCES bookings(booking_id)
+    FOREIGN KEY(booking_id) REFERENCES bookings(booking_id)
 );
 
 CREATE TABLE archives(
@@ -139,7 +143,6 @@ CREATE TABLE archives(
     booking_id INT,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
-
     FOREIGN KEY(renting_id) REFERENCES rentings(renting_id),
     FOREIGN KEY (booking_id) REFERENCES bookings(booking_id)
 );
