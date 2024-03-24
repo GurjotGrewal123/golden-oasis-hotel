@@ -7,6 +7,22 @@
   pointer-events: none;
 }
 
+.down{
+  padding-top: 10%;
+  padding-right: 12%;
+}
+
+.down2{
+  padding-top: 4%;
+}
+
+.newBorder{
+  padding-left: 10%;
+  padding-right: 5%;
+  padding-top: 10%;
+}
+
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
