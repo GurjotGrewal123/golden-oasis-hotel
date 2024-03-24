@@ -4,7 +4,7 @@ Golden Oasis Hotels
 Authors: 
 Gurjot Grewal (300263760) 
 
-x
+Matthew Petrucci (300119235)
 
 x
 
