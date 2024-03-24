@@ -117,6 +117,7 @@ CREATE TABLE bookings(
     hotel_id INT,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
+
     FOREIGN KEY(customer_id) REFERENCES customers(customer_id)
 );
 
@@ -124,6 +125,7 @@ CREATE TABLE rentings(
     renting_id INT PRIMARY KEY,
     employee_id VARCHAR(20) NOT NULL,
     customer_id VARCHAR(20) NOT NULL,
+    status VARCHAR(255) NOT NULL,
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
     room_number INT NOT NULL,
@@ -151,6 +153,23 @@ CREATE INDEX idx_customer_id ON bookings (customer_id); --Justification: this is
 CREATE INDEX idx_employee_email ON employees (employee_email); --Justification: for future systems this will be important for an email system.
 CREATE INDEX idx_chain_name ON hotels (chain_name); --Justification: the management of severeal hotels will be easier if indexed by chain name
 
+ALTER TABLE bookings ADD
+  CONSTRAINT fk_room_key
+  FOREIGN KEY (room_number, hotel_id)
+  REFERENCES rooms(room_number, hotel_id);
+
+ALTER TABLE bookings ADD
+  CONSTRAINT check_booking_status
+  CHECK (status IN (
+    'scheduled', 'active', 'completed'
+  ));
+
+  ALTER TABLE rentings ADD
+  CONSTRAINT check_renting_status
+  CHECK (status IN (
+   'renting', 'completed'
+  ));
+
 ALTER TABLE hotels ADD
   CONSTRAINT check_category
   CHECK (category IN (1, 2, 3, 4, 5));
@@ -169,6 +188,45 @@ CREATE VIEW bookings_history AS --Justification: well this is obvious. this is n
     JOIN customers c ON b.customer_id = c.customer_id
     LEFT JOIN rooms r ON b.room_number = r.room_number AND b.hotel_id = r.hotel_id
     LEFT JOIN hotels h ON b.hotel_id = h.hotel_id;
+
+CREATE OR REPLACE FUNCTION transfer_booking_to_renting()
+  RETURNS TRIGGER AS
+  $BODY$
+  BEGIN
+  IF new.status = 'complete' AND new.status <> old.status AND NOT EXISTS(SELECT 1 FROM rentings WHERE booking_id = new.id) THEN
+  INSERT INTO rentings(status, employee_id, customer_id, start_date, end_date, room_number, hotel_id, booking_id, has_booked, created_at, updated_at)
+  VALUES ('renting', old.employee_id, old.customer_id, old.start_date, old.end_date, old.room_number, old.hotel_id, new.id, 'f', now(), now());
+  END IF;
+  RETURN new;
+  END;
+  $BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+
+CREATE TRIGGER bookings_check_in
+  AFTER UPDATE
+  ON bookings
+  FOR EACH ROW
+  EXECUTE PROCEDURE transfer_booking_to_renting();
+
+CREATE OR REPLACE FUNCTION archive_completed_renting()
+RETURNS TRIGGER AS
+$BODY$
+BEGIN
+    IF NEW.status = 'completed' AND NEW.status <> OLD.status THEN
+        INSERT INTO archives (renting_id, booking_id, created_at, updated_at)
+        VALUES (NEW.renting_id, NEW.booking_id, NOW(), NOW());
+    END IF;
+    RETURN NEW;
+END;
+$BODY$
+LANGUAGE plpgsql VOLATILE
+COST 100;
+
+CREATE TRIGGER archive_completed_renting_trigger
+AFTER UPDATE ON rentings
+FOR EACH ROW
+EXECUTE FUNCTION archive_completed_renting();
 
 
 -- Populating Database 
