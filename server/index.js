@@ -3,13 +3,47 @@ const app = express();
 const cors = require("cors");
 const pool = require("./db");
 
-//middleware
+// Middleware
 app.use(cors());
-app.use(express.json()); //req.body
+app.use(express.json()); 
 
 
 
-//ROUTES//
+// API Calls //
+
+// customer creates a booking
+app.post("/bookings", async (req, res) => {
+  try {
+    const { status, customer_id, start_date, end_date, room_number, hotel_id } = req.body;
+
+    const newBooking = await pool.query(
+      "INSERT INTO bookings (status, customer_id, start_date, end_date, room_number, hotel_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW()) RETURNING *",
+      [status, customer_id, start_date, end_date, room_number, hotel_id]
+    );
+
+    res.json(newBooking.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// employee approves a booking in the system that is in the 'scheduled' state or creates a renting for a customer
+app.post("/rentings", async (req, res) => {
+  try {
+    const { booking_id, employee_id, customer_id, status, start_date, end_date, room_number, hotel_id } = req.body;
+
+    const newRenting = await pool.query(
+      "INSERT INTO rentings (booking_id, employee_id, customer_id, status, start_date, end_date, room_number, hotel_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW()) RETURNING *",
+      [booking_id, employee_id, customer_id, status, start_date, end_date, room_number, hotel_id]
+    );
+
+    res.json(newRenting.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 
 

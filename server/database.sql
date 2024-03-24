@@ -91,7 +91,7 @@ CREATE TABLE rooms(
 );
 
 CREATE TABLE customers(
-    customer_id VARCHAR(20) PRIMARY KEY CHECK (customer_id ~ '^[0-9]+$'),
+    customer_id SERIAL PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
     customer_email VARCHAR(255) DEFAULT '' NOT NULL,
     street_number INT NOT NULL,
@@ -108,9 +108,9 @@ CREATE TABLE customers(
 );
 
 CREATE TABLE bookings(
-    booking_id INT PRIMARY KEY,
+    booking_id SERIAL PRIMARY KEY,
     status VARCHAR(255) NOT NULL,
-    customer_id VARCHAR(20),
+    customer_id INT,
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
     room_number INT,
@@ -122,25 +122,26 @@ CREATE TABLE bookings(
 );
 
 CREATE TABLE rentings(
-    renting_id INT PRIMARY KEY,
+    renting_id SERIAL PRIMARY KEY,
+    booking_id INT,
     employee_id VARCHAR(20) NOT NULL,
-    customer_id VARCHAR(20) NOT NULL,
+    customer_id INT NOT NULL,
     status VARCHAR(255) NOT NULL,
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
     room_number INT NOT NULL,
     hotel_id INT NOT NULL,
-    booking_id INT,
     has_booked BOOLEAN DEFAULT 't' NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
+
     FOREIGN KEY(customer_id) REFERENCES customers(customer_id),
     FOREIGN KEY(employee_id) REFERENCES employees(employee_id),
     FOREIGN KEY(booking_id) REFERENCES bookings(booking_id)
 );
 
 CREATE TABLE archives(
-    archive_id INT PRIMARY KEY,
+    archive_id SERIAL PRIMARY KEY,
     renting_id INT NOT NULL,
     booking_id INT,
     created_at TIMESTAMP NOT NULL,
