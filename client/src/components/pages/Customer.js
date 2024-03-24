@@ -7,9 +7,9 @@ function Customer(){
     return(
 
         <div>
-            <div className="down2 text-center">
+            <h1 className="down2 text-center">
                 Customer View Page
-            </div>
+            </h1>
         </div>
 
     );
