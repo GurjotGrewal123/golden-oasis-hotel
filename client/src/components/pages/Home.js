@@ -9,11 +9,13 @@ function Home(){
 
         <Row>
             <div className="down2 text-center">
-                <h1>
-                    Golden Oasis Hotels
-                </h1>
+                <div className="mt-5">
+                    Welcome to
+                </div>
+                <div className="">
+                Golden Oasis Hotels
+                </div>
             </div>
-            <Row>
                 <div className="down text-center">
                     <Col>
                         <Button href="/Customer" variant="warning" size="lg">
@@ -26,7 +28,6 @@ function Home(){
                         </Button>
                     </Col>
                 </div>
-            </Row>
         </Row>
 
     );

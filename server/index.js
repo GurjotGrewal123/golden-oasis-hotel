@@ -17,9 +17,9 @@ app.get("/hotel_info", async(req, res) => {
     const {chain_name,street_name,street_number,city,province_state} = req.body;
 
     const hotels = await pool.query(
-      "SELECT chain_name,street_name,street_number,city,province_state FROM hotel",
-      [chain_name,street_name,street_number,city,province_state]
+      "SELECT chain_name, street_name, street_number, city, province_state FROM hotels"
     );
+    
 
     res.json(hotels.rows);
   }catch(err){
