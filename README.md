@@ -1,13 +1,13 @@
 Golden Oasis Hotels
 -
 
-Authors: 
+Authors:
+
 Gurjot Grewal (300263760) 
 
 Matthew Petrucci (300119235)
 
 Ryan Frost-Garant (300114543)
-x
 
 This project is a website that allows users to book and rent hotels all across the United States for various chains. It was created for our CSI2132 Winter 2024 Final Project.
 
