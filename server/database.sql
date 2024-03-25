@@ -216,7 +216,7 @@ $BODY$
 BEGIN
     IF NEW.status = 'completed' AND NEW.status <> OLD.status THEN
         INSERT INTO archives (renting_id, booking_id, created_at, updated_at)
-        VALUES (NEW.renting_id, NEW.booking_id, NOW(), NOW());
+        VALUES (NEW.renting_id, NEW.booking_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
     END IF;
     RETURN NEW;
 END;
@@ -636,3 +636,98 @@ VALUES
     (583, 48, 'Emerald Oasis Lodges', 200.00, 2, TRUE, FALSE, FALSE, 'Mini-bar, TV, WiFi', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (584, 48, 'Emerald Oasis Lodges', 200.00, 2, TRUE, FALSE, FALSE, 'Mini-bar, TV, WiFi', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (585, 48, 'Emerald Oasis Lodges', 200.00, 2, TRUE, FALSE, FALSE, 'Mini-bar, TV, WiFi', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+--Customers Addresses & Info
+
+INSERT INTO addresses (street_number, street_name, postal_code, city, province_state, created_at, updated_at)
+VALUES
+    (123, 'Main Street', '12345', 'New York City', 'New York', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (456, 'Oak Avenue', '23456', 'Los Angeles', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (789, 'Maple Lane', '34567', 'Chicago', 'Illinois', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (101, 'Elm Street', '45678', 'Houston', 'Texas', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (202, 'Cedar Road', '56789', 'Phoenix', 'Arizona', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (303, 'Pine Street', '67890', 'San Francisco', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (404, 'Birch Lane', '78901', 'Seattle', 'Washington', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (505, 'Spruce Avenue', '89012', 'Miami', 'Florida', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (606, 'Ash Street', '90123', 'Denver', 'Colorado', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (707, 'Cherry Road', '01234', 'Boston', 'Massachusetts', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (808, 'Willow Lane', '12356', 'Dallas', 'Texas', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (909, 'Hickory Avenue', '23467', 'Atlanta', 'Georgia', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (111, 'Poplar Court', '34578', 'San Diego', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (222, 'Juniper Lane', '45679', 'Las Vegas', 'Nevada', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (333, 'Cypress Street', '56780', 'Orlando', 'Florida', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (444, 'Fir Road', '67890', 'Philadelphia', 'Pennsylvania', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (555, 'Sycamore Avenue', '78901', 'Portland', 'Oregon', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (666, 'Redwood Lane', '89012', 'Austin', 'Texas', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (777, 'Chestnut Lane', '90123', 'San Antonio', 'Texas', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (888, 'Cottonwood Court', '01234', 'Charlotte', 'North Carolina', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (999, 'Magnolia Avenue', '12345', 'San Jose', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1010, 'Palm Street', '23456', 'Jacksonville', 'Florida', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1111, 'Cedar Street', '34567', 'Indianapolis', 'Indiana', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1212, 'Maple Court', '45678', 'San Francisco', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1313, 'Birch Avenue', '56789', 'Columbus', 'Ohio', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1414, 'Pine Road', '67890', 'Fort Worth', 'Texas', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1515, 'Oak Lane', '78901', 'Detroit', 'Michigan', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1616, 'Elm Court', '89012', 'Memphis', 'Tennessee', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1717, 'Willow Road', '90123', 'Baltimore', 'Maryland', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1818, 'Hickory Street', '01234', 'Boston', 'Massachusetts', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (1919, 'Cherry Lane', '12345', 'Washington D.C.', 'District of Columbia', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (2020, 'Chestnut Avenue', '23456', 'Milwaukee', 'Wisconsin', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (2121, 'Sycamore Road', '34567', 'Portland', 'Oregon', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (2222, 'Cottonwood Lane', '45678', 'Louisville', 'Kentucky', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (2323, 'Redwood Court', '56789', 'Las Vegas', 'Nevada', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (2424, 'Magnolia Street', '67890', 'Oklahoma City', 'Oklahoma', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (2525, 'Palm Avenue', '78901', 'Albuquerque', 'New Mexico', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (2626, 'Cedar Lane', '89012', 'Tucson', 'Arizona', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (2727, 'Maple Road', '90123', 'Fresno', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (2828, 'Birch Court', '01234', 'Sacramento', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (2929, 'Pine Lane', '12345', 'Long Beach', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (3030, 'Oak Road', '23456', 'Kansas City', 'Missouri', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (3131, 'Elm Avenue', '34567', 'Mesa', 'Arizona', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (3232, 'Willow Street', '45678', 'Virginia Beach', 'Virginia', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO customers (full_name, customer_email, street_number, street_name, postal_code, city, province_state, created_at, updated_at)
+VALUES
+    ('John Doe', 'john.doe@example.com', 123, 'Main Street', '12345', 'New York City', 'New York', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Jane Smith', 'jane.smith@example.com', 456, 'Oak Avenue', '23456', 'Los Angeles', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Michael Johnson', 'michael.johnson@example.com', 789, 'Maple Lane', '34567', 'Chicago', 'Illinois', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Emily Davis', 'emily.davis@example.com', 101, 'Elm Street', '45678', 'Houston', 'Texas', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Robert Wilson', 'robert.wilson@example.com', 202, 'Cedar Road', '56789', 'Phoenix', 'Arizona', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Alice Brown', 'alice.brown@example.com', 303, 'Pine Street', '67890', 'San Francisco', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('David Martinez', 'david.martinez@example.com', 404, 'Birch Lane', '78901', 'Seattle', 'Washington', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Sarah Taylor', 'sarah.taylor@example.com', 505, 'Spruce Avenue', '89012', 'Miami', 'Florida', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('James Anderson', 'james.anderson@example.com', 606, 'Ash Street', '90123', 'Denver', 'Colorado', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Michelle Thomas', 'michelle.thomas@example.com', 707, 'Cherry Road', '01234', 'Boston', 'Massachusetts', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Christopher Garcia', 'christopher.garcia@example.com', 808, 'Willow Lane', '12356', 'Dallas', 'Texas', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Amanda Hernandez', 'amanda.hernandez@example.com', 909, 'Hickory Avenue', '23467', 'Atlanta', 'Georgia', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Daniel King', 'daniel.king@example.com', 111, 'Poplar Court', '34578', 'San Diego', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Linda Martinez', 'linda.martinez@example.com', 222, 'Juniper Lane', '45679', 'Las Vegas', 'Nevada', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('William Lee', 'william.lee@example.com', 333, 'Cypress Street', '56780', 'Orlando', 'Florida', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Karen Clark', 'karen.clark@example.com', 444, 'Fir Road', '67890', 'Philadelphia', 'Pennsylvania', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Brandon Rodriguez', 'brandon.rodriguez@example.com', 555, 'Sycamore Avenue', '78901', 'Portland', 'Oregon', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Jennifer Scott', 'jennifer.scott@example.com', 666, 'Redwood Lane', '89012', 'Austin', 'Texas', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Taylor Walker', 'taylor.walker@example.com', 777, 'Chestnut Lane', '90123', 'San Antonio', 'Texas', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Rachel Perez', 'rachel.perez@example.com', 888, 'Cottonwood Court', '01234', 'Charlotte', 'North Carolina', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Matthew Evans', 'matthew.evans@example.com', 999, 'Magnolia Avenue', '12345', 'San Jose', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Lauren Turner', 'lauren.turner@example.com', 1010, 'Palm Street', '23456', 'Jacksonville', 'Florida', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Ryan Hill', 'ryan.hill@example.com', 1111, 'Cedar Street', '34567', 'Indianapolis', 'Indiana', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Ashley White', 'ashley.white@example.com', 1212, 'Maple Court', '45678', 'San Francisco', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Joshua Harris', 'joshua.harris@example.com', 1313, 'Birch Avenue', '56789', 'Columbus', 'Ohio', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Megan Martinez', 'megan.martinez@example.com', 1414, 'Pine Road', '67890', 'Fort Worth', 'Texas', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Justin Nelson', 'justin.nelson@example.com', 1515, 'Oak Lane', '78901', 'Detroit', 'Michigan', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Brittany Carter', 'brittany.carter@example.com', 1616, 'Elm Court', '89012', 'Memphis', 'Tennessee', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Brandon Bell', 'brandon.bell@example.com', 1717, 'Willow Road', '90123', 'Baltimore', 'Maryland', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Stephanie Ross', 'stephanie.ross@example.com', 1818, 'Hickory Street', '01234', 'Boston', 'Massachusetts', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Nicole Rivera', 'nicole.rivera@example.com', 1919, 'Cherry Lane', '12345', 'Washington D.C.', 'District of Columbia', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Jessica Stewart', 'jessica.stewart@example.com', 2121, 'Sycamore Road', '34567', 'Portland', 'Oregon', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Timothy Sanchez', 'timothy.sanchez@example.com', 2222, 'Cottonwood Lane', '45678', 'Louisville', 'Kentucky', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Heather Cooper', 'heather.cooper@example.com', 2323, 'Redwood Court', '56789', 'Las Vegas', 'Nevada', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Zachary Morris', 'zachary.morris@example.com', 2424, 'Magnolia Street', '67890', 'Oklahoma City', 'Oklahoma', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Diana Bailey', 'diana.bailey@example.com', 2525, 'Palm Avenue', '78901', 'Albuquerque', 'New Mexico', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Stephen Murphy', 'stephen.murphy@example.com', 2626, 'Cedar Lane', '89012', 'Tucson', 'Arizona', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Katherine Cook', 'katherine.cook@example.com', 2727, 'Maple Road', '90123', 'Fresno', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Austin Bailey', 'austin.bailey@example.com', 2828, 'Birch Court', '01234', 'Sacramento', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Rebecca Simmons', 'rebecca.simmons@example.com', 2929, 'Pine Lane', '12345', 'Long Beach', 'California', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Emma Powell', 'emma.powell@example.com', 3030, 'Oak Road', '23456', 'Kansas City', 'Missouri', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Vincent Cox', 'vincent.cox@example.com', 3131, 'Elm Avenue', '34567', 'Mesa', 'Arizona', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('Evelyn Peterson', 'evelyn.peterson@example.com', 3232, 'Willow Street', '45678', 'Virginia Beach', 'Virginia', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
