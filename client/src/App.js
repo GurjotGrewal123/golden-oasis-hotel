@@ -1,11 +1,12 @@
 import './App.css';
-import TopNavbar from './components/TopNavbar';
+import TopNavbar from './components/subcomponents/TopNavbar';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Home from './components/pages/Home';
 import Customer from './components/pages/Customer';
-import Employee from './components/pages/Employee';
+import Employee from './components/pages/Employee'; 
 
 function App() {
+
   return (
 
     <BrowserRouter>

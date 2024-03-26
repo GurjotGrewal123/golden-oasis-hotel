@@ -113,12 +113,13 @@ CREATE TABLE bookings(
     customer_id INT,
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP NOT NULL,
-    room_number INT,
-    hotel_id INT,
+    room_number INT NOT NULL,
+    hotel_id INT NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
 
-    FOREIGN KEY(customer_id) REFERENCES customers(customer_id)
+    FOREIGN KEY(customer_id) REFERENCES customers(customer_id),
+    FOREIGN KEY(room_number, hotel_id) REFERENCES rooms(room_number, hotel_id)
 );
 
 CREATE TABLE rentings(
@@ -137,7 +138,8 @@ CREATE TABLE rentings(
 
     FOREIGN KEY(customer_id) REFERENCES customers(customer_id),
     FOREIGN KEY(employee_id) REFERENCES employees(employee_id),
-    FOREIGN KEY(booking_id) REFERENCES bookings(booking_id)
+    FOREIGN KEY(booking_id) REFERENCES bookings(booking_id),
+    FOREIGN KEY(room_number, hotel_id) REFERENCES rooms(room_number, hotel_id)
 );
 
 CREATE TABLE archives(
@@ -636,3 +638,6 @@ VALUES
     (583, 48, 'Emerald Oasis Lodges', 200.00, 2, TRUE, FALSE, FALSE, 'Mini-bar, TV, WiFi', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (584, 48, 'Emerald Oasis Lodges', 200.00, 2, TRUE, FALSE, FALSE, 'Mini-bar, TV, WiFi', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (585, 48, 'Emerald Oasis Lodges', 200.00, 2, TRUE, FALSE, FALSE, 'Mini-bar, TV, WiFi', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO customers (full_name, customer_email, street_number, street_name, postal_code, city, province_state, created_at, updated_at)
+VALUES ('John Doe', 'johndoe@example.com', 656, 'Acacia Boulevard', '25874', 'Lexington', 'Kentucky', NOW(), NOW());

@@ -14,11 +14,27 @@ app.use(express.json());
 //Get hotel information
 app.get("/hotel_info", async(req, res) => {
   try{
-    const {chain_name,street_name,street_number,city,province_state} = req.body;
-
     const hotels = await pool.query(
-      "SELECT chain_name, street_name, street_number, city, province_state FROM hotels"
+      "SELECT hotel_id, chain_name, street_name, street_number, city, province_state, category FROM hotels"
     );
+    
+
+    res.json(hotels.rows);
+  }catch(err){
+    console.error(err.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// get all the rooms for specific hotel
+app.get("/hotel_info/room/:id", async(req, res) => {
+
+  try{
+    const { id } = req.params;
+
+    const hotels = await pool.query("SELECT * FROM rooms where hotel_id = $1", [
+      id
+    ]);
     
 
     res.json(hotels.rows);
@@ -128,30 +144,6 @@ app.post("/todos", async (req, res) => {
     );
 
     res.json(newTodo.rows[0]);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
-//get all todos
-app.get("/todos", async (req, res) => {
-  try {
-    const allTodos = await pool.query("SELECT * FROM todo");
-    res.json(allTodos.rows);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
-//get a todo
-app.get("/todos/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const todo = await pool.query("SELECT * FROM todo WHERE todo_id = $1", [
-      id
-    ]);
-
-    res.json(todo.rows[0]);
   } catch (err) {
     console.error(err.message);
   }
