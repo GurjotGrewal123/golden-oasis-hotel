@@ -2,24 +2,31 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Image from 'react-bootstrap/Image';
+import gold_lobby from './Images/gold_lobby.jpg';
+import Card from 'react-bootstrap/Card';
 
 function Home(){
 
     return(
 
         <Row>
-            <div className="down2 text-center">
-                <div className="mt-5">
-                    Welcome to
+            <Image src={gold_lobby} fluid />
+            <div className='adjust'>
+                <div className="right1 text-center">
+                    <Card border="warning" style={{ position:'absolute',right:'42%', width: '14rem' ,height:'6rem'}} >
+                        <Card.Body>
+                            <Card.Title>Welcome To</Card.Title>
+                            <Card.Title>Golden Oasis Hotels</Card.Title>
+                        </Card.Body>
+                    </Card>
                 </div>
-                <div className="">
-                Golden Oasis Hotels
-                </div>
-            </div>
-                <div className="down text-center">
+                
+                
+                <div className="down text-center" style={{position:'absolute', right:'32%'}}>
                     <Col>
                         <Button href="/Customer" variant="warning" size="lg">
-                            Customer View
+                            Customer View                        
                         </Button>
                     </Col>
                     <Col className="down2">
@@ -28,6 +35,7 @@ function Home(){
                         </Button>
                     </Col>
                 </div>
+            </div>
         </Row>
 
     );

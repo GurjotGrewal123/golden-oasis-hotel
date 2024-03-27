@@ -16,6 +16,17 @@
   padding-top: 4%;
 }
 
+.adjust{
+  position: absolute;
+  margin-top: -25%;
+}
+
+.right1{
+  position: static;
+  margin-top: 10%;
+  margin-right: 250px;
+}
+
 .newBorder{
   padding-left: 10%;
   padding-right: 5%;
