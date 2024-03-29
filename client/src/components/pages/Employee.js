@@ -4,13 +4,15 @@ import { useState, useEffect } from "react";
 
 function Employee(){
 
-    const [dataCust, setDataCust] = useState({customers:[]})
+    const [dataCust, setDataCust] = useState({customers:[]});
 
     useEffect(() => {
-        fetch("http://localhost:3001/customers")
+        fetch("http://localhost:3001/customer_info")
         .then((response) => response.json())
-        .then((dataCust) => setDataCust({customers: dataCust}));
+        .then((data) => setDataCust({customers: data}));
     }, []);
+    console.log("test");
+    console.log(dataCust);
 
     const showCust = (customer) => {
         return (<tr>
@@ -29,24 +31,26 @@ function Employee(){
             <h1 className="down2 text-center">
                 Employee View Page
             </h1>
-        <div className="container">
-            <div className="row"><h2 className="text-center">Customers</h2></div>
-                <div className="row">
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">Full Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Street Number</th>
-                                <th scope="col">Street Name</th>
-                                <th scope="col">City</th>
-                                <th scope="col">State</th>
-                            </tr>
-                        </thead>
-                        <tbody>{(dataCust["customers"]).map(showCust)}</tbody>
-                    </table>
+            <div className="container">
+                <div className="row"><h2 className="text-center">Customers</h2></div>
+                    <div className="row">
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Full Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Street Number</th>
+                                    <th scope="col">Street Name</th>
+                                    <th scope="col">City</th>
+                                    <th scope="col">State</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    {dataCust["customers"].map(showCust)}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
         </div>
 
     );

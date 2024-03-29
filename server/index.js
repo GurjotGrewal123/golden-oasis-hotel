@@ -47,11 +47,9 @@ app.get("/hotel_info/room/:id", async(req, res) => {
 //Get customer information
 app.get("/customer_info", async(req, res) => {
   try{
-    const {full_name, customer_email, street_number,street_name, city, province_state} = req.body;
 
     const customers = await pool.query(
-      "SELECT full_name, customer_email, street_number,street_name, city, province_state FROM customers",
-      [full_name, customer_email, street_number,street_name, city, province_state]
+      "SELECT full_name, customer_email, street_number,street_name, city, province_state FROM customers"
     );
 
     res.json(customers.rows);
