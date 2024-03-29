@@ -59,6 +59,21 @@ app.get("/customer_info", async(req, res) => {
   }
 });
 
+//Get Bookings
+app.get("/bookings_info", async(req, res) => {
+  try{
+
+    const bookings = await pool.query(
+      "SELECT chain_name,room_number,start_date,end_date,status,customer_email FROM bookings b,customers cu,hotels h WHERE b.customer_id = cu.customer_id AND h.hotel_id = b.hotel_id"
+    );
+
+    res.json(bookings.rows);
+  }catch(err){
+    console.error(err.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 //Avg Rating of each hotel chain
 app.get("/hotel_avg", async(req, res) => {
   try{
