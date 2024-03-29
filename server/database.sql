@@ -194,17 +194,17 @@ CREATE VIEW bookings_history AS --Justification: well this is obvious. this is n
 
 CREATE OR REPLACE FUNCTION transfer_booking_to_renting()
   RETURNS TRIGGER AS
-  $BODY$
-  BEGIN
-  IF new.status = 'complete' AND new.status <> old.status AND NOT EXISTS(SELECT 1 FROM rentings WHERE booking_id = new.id) THEN
-  INSERT INTO rentings(status, employee_id, customer_id, start_date, end_date, room_number, hotel_id, booking_id, has_booked, created_at, updated_at)
-  VALUES ('renting', old.employee_id, old.customer_id, old.start_date, old.end_date, old.room_number, old.hotel_id, new.id, 'f', now(), now());
+$BODY$
+BEGIN
+  IF new.status = 'active' AND new.status <> old.status AND NOT EXISTS(SELECT 1 FROM rentings WHERE booking_id = old.booking_id) THEN
+    INSERT INTO rentings(status, employee_id, customer_id, start_date, end_date, room_number, hotel_id, booking_id, has_booked, created_at, updated_at)
+    VALUES ('renting', 'EMP001', old.customer_id, old.start_date, old.end_date, old.room_number, old.hotel_id, old.booking_id, 't', now(), now());
   END IF;
   RETURN new;
-  END;
-  $BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
+END;
+$BODY$
+LANGUAGE plpgsql VOLATILE
+COST 100;
 
 CREATE TRIGGER bookings_check_in
   AFTER UPDATE
@@ -218,7 +218,7 @@ $BODY$
 BEGIN
     IF NEW.status = 'completed' AND NEW.status <> OLD.status THEN
         INSERT INTO archives (renting_id, booking_id, created_at, updated_at)
-        VALUES (NEW.renting_id, NEW.booking_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+        VALUES (old.renting_id, old.booking_id, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
     END IF;
     RETURN NEW;
 END;

@@ -7,8 +7,10 @@ function Employee(){
 
     const [dataCust, setDataCust] = useState({customers:[]});
     const [dataBook, setDataBook] = useState({bookings:[]});
+    const [dataRent, setDataRent] = useState({rentings:[]});
     const [open1, setOpen1] = useState(false);
     const [open2, setOpen2] = useState(false);
+    const [open3, setOpen3] = useState(false);
 
     useEffect(() => {
         fetch("http://localhost:3001/customer_info") 
@@ -20,7 +22,55 @@ function Employee(){
         fetch("http://localhost:3001/bookings_info")
         .then((response) => response.json())
         .then((data) => setDataBook({bookings: data}));
-    }, []);
+    }, [dataBook]);
+
+    useEffect(() => {
+        fetch("http://localhost:3001/rentings_info")
+        .then((response) => response.json())
+        .then((data) => setDataRent({rentings: data}));
+    }, [dataRent]);
+
+    const updateBooking = async (booking_id) => {
+        try {
+          const response = await fetch(`http://localhost:3001/bookings/${booking_id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({}), 
+          });
+      
+          if (response.ok) {
+            const data = await response.json();
+            console.log(data.message); 
+          } else {
+            console.error('Failed to update booking status:', response.statusText);
+          }
+        } catch (error) {
+          console.error('Error updating booking status:', error.message);
+        }
+      };
+
+      const updateRenting = async (renting_id) => {
+        try {
+            const response = await fetch(`http://localhost:3001/rentings/${renting_id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({}), 
+            });
+        
+            if (response.ok) {
+              const data = await response.json();
+              console.log(data.message); 
+            } else {
+              console.error('Failed to update renting status:', response.statusText);
+            }
+          } catch (error) {
+            console.error('Error updating renting status:', error.message);
+          }
+      };
 
     const showCust = (customer) => {
         return (<tr>
@@ -41,7 +91,28 @@ function Employee(){
             <td>{bookings.end_date}</td>
             <td>{bookings.status}</td>
             <td>{bookings.customer_email}</td>
-        </tr>);
+            <Button
+                onClick={() => updateBooking(bookings.booking_id)}
+            >
+                Check-In
+            </Button>      
+            </tr>);
+    }
+
+    const showRentings = (rentings) => {
+        return (<tr>
+            <th scope="row">{rentings.hotel_id}</th>
+            <td>{rentings.room_number}</td>
+            <td>{rentings.start_date}</td>
+            <td>{rentings.end_date}</td>
+            <td>{rentings.status}</td>
+            <td>{rentings.has_booked ? 'TRUE' : 'FALSE'}</td>
+            <Button
+                onClick={() => updateRenting(rentings.renting_id)}
+            >
+                Check-Out
+            </Button>      
+            </tr>);
     }
 
     return(
@@ -78,6 +149,38 @@ function Employee(){
                 </div>
                 
             </Collapse>
+            <div>
+                <Button
+                    className="mt-2"
+                    onClick={() => setOpen3(!open3)}
+                >
+                    Toggle Rentings
+                </Button>
+            </div>
+            <Collapse in={open3}>
+            <div className="container">
+                    <div className="row"><h2 className="down2 text-center">Renting Information</h2></div>
+                    <div className="row">
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Hotel Id</th>
+                                    <th scope="col">Room Number</th>
+                                    <th scope="col">Start Date</th>
+                                    <th scope="col">End Date</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Has Booked</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    {dataRent["rentings"].map(showRentings)}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </Collapse>
+
+
             <div>
                 <Button
                     className="mt-2"

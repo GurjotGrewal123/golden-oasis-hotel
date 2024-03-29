@@ -64,10 +64,26 @@ app.get("/bookings_info", async(req, res) => {
   try{
 
     const bookings = await pool.query(
-      "SELECT chain_name,room_number,start_date,end_date,status,customer_email FROM bookings b,customers cu,hotels h WHERE b.customer_id = cu.customer_id AND h.hotel_id = b.hotel_id"
+      "SELECT booking_id,chain_name,room_number,start_date,end_date,status,customer_email FROM bookings b,customers cu,hotels h WHERE b.customer_id = cu.customer_id AND h.hotel_id = b.hotel_id"
     );
 
     res.json(bookings.rows);
+  }catch(err){
+    console.error(err.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+//Get Rentings
+app.get("/rentings_info", async(req, res) => {
+  try{
+
+    const rentings = await pool.query(
+      "SELECT * FROM rentings"
+    );
+
+    res.json(rentings.rows);
   }catch(err){
     console.error(err.message);
     res.status(500).send("Internal Server Error");
@@ -125,18 +141,19 @@ app.post("/bookings", async (req, res) => {
   }
 });
 
-// employee approves a booking in the system that is in the 'scheduled' state or creates a renting for a customer
-app.post("/rentings", async (req, res) => {
-  try {
-    const { booking_id, employee_id, customer_id, status, start_date, end_date, room_number, hotel_id } = req.body;
 
-    const newRenting = await pool.query(
-      "INSERT INTO rentings (booking_id, employee_id, customer_id, status, start_date, end_date, room_number, hotel_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW()) RETURNING *",
-      [booking_id, employee_id, customer_id, status, start_date, end_date, room_number, hotel_id]
+app.put('/bookings/:bookingId', async (req, res) => {
+  const { bookingId } = req.params;
+
+  try {
+    const result = await pool.query(
+      'UPDATE bookings SET status = $1 WHERE booking_id = $2 RETURNING *',
+      ['active', bookingId]
     );
 
-    res.json(newRenting.rows[0]);
-  } catch (err) {
+    res.json({ message: 'Booking status updated successfully.' });
+
+  } catch (error) {
     console.error(err.message);
     res.status(500).send("Internal Server Error");
   }
@@ -144,52 +161,28 @@ app.post("/rentings", async (req, res) => {
 
 
 
+app.put('/rentings/:rentingId', async (req, res) => {
+  const { rentingId } = req.params;
 
-
-// The following is just an example of a API calls. It does not have anything to do with the hotels.
-//create a todo
-app.post("/todos", async (req, res) => {
   try {
-    const { description } = req.body;
-    const newTodo = await pool.query(
-      "INSERT INTO todo (description) VALUES($1) RETURNING *",
-      [description]
+    const result = await pool.query(
+      'UPDATE rentings SET status = $1 WHERE renting_id = $2 RETURNING *',
+      ['completed', rentingId]
     );
 
-    res.json(newTodo.rows[0]);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
-//update a todo
-app.put("/todos/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { description } = req.body;
-    const updateTodo = await pool.query(
-      "UPDATE todo SET description = $1 WHERE todo_id = $2",
-      [description, id]
+    const bookingUpdate = await pool.query(
+      'UPDATE bookings SET status = $1 WHERE booking_id = (SELECT booking_id FROM rentings WHERE renting_id = $2) RETURNING *',
+      ['completed', rentingId]
     );
 
-    res.json("Todo was updated!");
-  } catch (err) {
+    res.json({ message: 'Renting status updated successfully.' });
+
+  } catch (error) {
     console.error(err.message);
+    res.status(500).send("Internal Server Error");
   }
 });
 
-//delete a todo
-app.delete("/todos/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1", [
-      id
-    ]);
-    res.json("Todo was deleted!");
-  } catch (err) {
-    console.log(err.message);
-  }
-});
 
 app.listen(3001, () => {
   console.log("server has started on port 3001");

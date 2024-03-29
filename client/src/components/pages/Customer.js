@@ -30,14 +30,13 @@ function Customer(){
     return(
         <div className="p-5">
             <div className="d-flex flex-column align-items-center justify-content-center">
-                <div className="mt-5 text-center">Book from the hotels below</div>
                 <Button
-                    className="mt-2"
+                    className="mt-5"
                     onClick={() => setOpen(!open)}
                     aria-controls="example-collapse-text"
                     aria-expanded={open}
                 >
-                    Collapse
+                    Toggle Hotels
                 </Button>
                 </div>
         <Collapse in={open}>
