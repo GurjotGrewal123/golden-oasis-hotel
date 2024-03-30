@@ -35,6 +35,7 @@ function Customer(){
                     onClick={() => setOpen(!open)}
                     aria-controls="example-collapse-text"
                     aria-expanded={open}
+                    variant="warning"
                 >
                     Toggle Hotels
                 </Button>
@@ -56,7 +57,7 @@ function Customer(){
               <p>Number: {hotel.street_number}</p>
               <p>City: {hotel.city}</p>
               <p>State: {hotel.province_state}</p>
-              <Button onClick={() => openModal(hotel)} className="btn btn-primary">View Rooms</Button>
+              <Button variant="warning" onClick={() => openModal(hotel)} className="btn btn-primary">View Rooms</Button>
             </div>
           </div>
         </div>

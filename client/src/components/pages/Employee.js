@@ -93,6 +93,7 @@ function Employee(){
             <td>{bookings.customer_email}</td>
             <Button
                 onClick={() => updateBooking(bookings.booking_id)}
+                variant="warning"
             >
                 Check-In
             </Button>      
@@ -109,6 +110,7 @@ function Employee(){
             <td>{rentings.has_booked ? 'TRUE' : 'FALSE'}</td>
             <Button
                 onClick={() => updateRenting(rentings.renting_id)}
+                variant="warning"
             >
                 Check-Out
             </Button>      
@@ -123,6 +125,7 @@ function Employee(){
                 onClick={() => setOpen1(!open1)}
                 aria-controls="example-collapse-text"
                 aria-expanded={open1}
+                variant="warning"
             >
                 Toggle Bookings
             </Button>
@@ -153,6 +156,7 @@ function Employee(){
                 <Button
                     className="mt-2"
                     onClick={() => setOpen3(!open3)}
+                    variant="warning"
                 >
                     Toggle Rentings
                 </Button>
@@ -187,6 +191,7 @@ function Employee(){
                     onClick={() => setOpen2(!open2)}
                     aria-controls="example-collapse-text"
                     aria-expanded={open2}
+                    variant="warning"
                 >
                     Toggle Customer Information
                 </Button>

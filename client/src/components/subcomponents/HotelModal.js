@@ -86,7 +86,7 @@ function HotelModal({ show, onHide, hotel }) {
                         <p>Amenities: {room.amenities}</p>
                         <p>Damage: {room.damages}</p>
       
-                        <Button className="mb-4" variant="primary" onClick={() => handleToggleDatePicker(index)}>Dates</Button>
+                        <Button  className="mb-4" variant="warning" onClick={() => handleToggleDatePicker(index)}>Dates</Button>
                         {selectedRoomIndex === index && (
                             <div>
                             <DateRangePicker
@@ -102,7 +102,7 @@ function HotelModal({ show, onHide, hotel }) {
                                 direction="vertical"
                                 inputRanges={[]}
                             />
-                            <Button className="mb-1" variant="primary" onClick={() => handleBooking(room)}>Confirm</Button>
+                            <Button className="mb-1" variant="success" onClick={() => handleBooking(room)}>Confirm</Button>
                             </div>
                         )}
                     
