@@ -57,7 +57,7 @@ function Customer(){
               <p>Number: {hotel.street_number}</p>
               <p>City: {hotel.city}</p>
               <p>State: {hotel.province_state}</p>
-              <Button variant="warning" onClick={() => openModal(hotel)} className="btn btn-primary">View Rooms</Button>
+              <Button variant="warning" onClick={() => openModal(hotel)} className="btn btn-primary"> View {hotel.available_rooms} Available Rooms</Button>
             </div>
           </div>
         </div>

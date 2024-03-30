@@ -15,7 +15,7 @@ app.use(express.json());
 app.get("/hotel_info", async(req, res) => {
   try{
     const hotels = await pool.query(
-      "SELECT hotel_id, chain_name, street_name, street_number, city, province_state, category FROM hotels"
+      "SELECT  h.chain_name,street_name, street_number, city, province_state, category, available_rooms FROM hotels h, available_rooms_per_hotel arph where h.hotel_id = arph.hotel_id"
     );
     
 
@@ -93,11 +93,9 @@ app.get("/rentings_info", async(req, res) => {
 //Avg Rating of each hotel chain
 app.get("/hotel_avg", async(req, res) => {
   try{
-    const {chain_name,avg} = req.body;
 
     const chain_avgs = await pool.query(
-      "SELECT chain_name, avg(category) AS avg_rating FROM hotels GROUP BY chain_name;",
-      [chain_name,avg]
+      "SELECT chain_name, avg(category) AS avg_rating FROM hotels GROUP BY chain_name;"
     );
 
     res.json(chain_avgs.rows);
@@ -110,11 +108,9 @@ app.get("/hotel_avg", async(req, res) => {
 //Select 5 Star Rated hotels, where the chains do not have 1 or 2 rated hotels
 app.get("/five_star", async(req, res) => {
   try{
-    const {chain_name,street_name, street_number, city, province_state} = req.body;
 
     const fives = await pool.query(
-      "select chain_name,street_name, street_number, city, province_state from hotels where category = 5 and chain_name not in (select chain_name from hotels where category = 2) and chain_name not in (select chain_name from hotels where category = 1)",
-      [chain_name,street_name, street_number, city, province_state]
+      "select chain_name,street_name, street_number, city, province_state from hotels where category = 5 and chain_name not in (select chain_name from hotels where category = 2) and chain_name not in (select chain_name from hotels where category = 1)"
     );
 
     res.json(fives.rows);
