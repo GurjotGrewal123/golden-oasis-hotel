@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Button, Collapse} from 'react-bootstrap';
-
+import Renting from "../subcomponents/Renting";
 
 function Employee(){
 
@@ -11,6 +11,17 @@ function Employee(){
     const [open1, setOpen1] = useState(false);
     const [open2, setOpen2] = useState(false);
     const [open3, setOpen3] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+
+
+    const openModal = () => {
+        setModalOpen(true); 
+    };
+
+    const closeModal = () => {
+        setModalOpen(false); 
+    };
+
 
     useEffect(() => {
         fetch("http://localhost:3001/customer_info") 
@@ -164,6 +175,13 @@ function Employee(){
             <Collapse in={open3}>
             <div className="container">
                     <div className="row"><h2 className="down2 text-center">Renting Information</h2></div>
+                    <Button
+                        variant="warning"
+                        onClick={() => openModal()}
+                    >
+                        Make-A-Rent
+                    </Button>   
+                    <Renting show={modalOpen} onHide={closeModal} />
                     <div className="row">
                         <table className="table table-striped">
                             <thead>

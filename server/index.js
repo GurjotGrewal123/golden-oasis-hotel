@@ -15,7 +15,7 @@ app.use(express.json());
 app.get("/hotel_info", async(req, res) => {
   try{
     const hotels = await pool.query(
-      "SELECT  h.chain_name,street_name, street_number, city, province_state, category, available_rooms FROM hotels h, available_rooms_per_hotel arph where h.hotel_id = arph.hotel_id"
+      "SELECT  h.hotel_id,h.chain_name,street_name, street_number, city, province_state, category, available_rooms FROM hotels h, available_rooms_per_hotel arph where h.hotel_id = arph.hotel_id"
     );
     
 
@@ -131,6 +131,23 @@ app.post("/bookings", async (req, res) => {
     );
 
     res.json(newBooking.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// employee approves a booking in the system that is in the 'scheduled' state or creates a renting for a customer
+app.post("/rentings", async (req, res) => {
+  try {
+    const {employee_id, customer_id, start_date, end_date, room_number, hotel_id } = req.body;
+
+    const newRenting = await pool.query(
+      "INSERT INTO rentings (employee_id, customer_id, status, start_date, end_date, room_number, hotel_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW()) RETURNING *",
+      [employee_id, customer_id, 'renting', start_date, end_date, room_number, hotel_id]
+    );
+    
+    res.json(newRenting.rows[0]);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Internal Server Error");
